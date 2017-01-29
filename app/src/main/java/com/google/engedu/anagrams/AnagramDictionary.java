@@ -15,6 +15,8 @@
 
 package com.google.engedu.anagrams;
 
+import android.text.format.Time;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -32,7 +34,7 @@ public class AnagramDictionary {
     private static final int DEFAULT_WORD_LENGTH = 3;
     private static final int MAX_WORD_LENGTH = 7;
     private Random random = new Random();
-//    private ArrayList<String> wordList = new ArrayList<String>();
+    private ArrayList<String> wordList = new ArrayList<String>();
     private HashSet<String> wordSet = new HashSet<>();
     private HashMap<String, List<String>> lettersToWord = new HashMap<>();
 
@@ -41,7 +43,7 @@ public class AnagramDictionary {
         String line;
         while((line = in.readLine()) != null) {
             String word = line.trim();
-//            wordList.add(word);
+            wordList.add(word);
             wordSet.add(word);
             String sorted = sortLetters(word);
             if(lettersToWord.containsKey(sorted)) {
@@ -99,7 +101,12 @@ public class AnagramDictionary {
     }
 
     public String pickGoodStarterWord() {
-        return "stop";
+        while(true) {
+            String word = wordList.get(random.nextInt(wordList.size()));
+            if(getAnagramsWithOneMoreLetter(word).size() >= MIN_NUM_ANAGRAMS) {
+                return word;
+            }
+        }
     }
 
     private String sortLetters(String sortMe) {
